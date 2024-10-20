@@ -1,0 +1,254 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="canonical" href="https://appseed.us/admin-dashboards/django-dashboard-argon">
+  <link rel="manifest" href="{% static 'assets/manifest.json' %}">
+  <meta name="theme-color" content="#ffffff">
+  
+  <title>Dent i-Delil Clinic - Dashboard</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="{% static 'assets/img/favicon.png' %}" type="image/png">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@300;400;600;700&display=swap&subset=arabic" rel="stylesheet">
+  <!-- Icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <script src="https://cdn.rawgit.com/icons8/titanic/master/dist/js/titanic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.5.9/bodymovin.min.js"></script>  
+  <link rel="stylesheet" href="{% static 'assets/css/nucleo-icons.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'assets/css/nucleo-svg.css' %}" type="text/css">
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'assets/css/nucleo-svg.css' %}" type="text/css">
+  <!-- Argon CSS -->
+  <link id="custom-style" rel="stylesheet" href="{% static 'assets/css/custom-styles.css' %}" type="text/css">
+  <link id="pagestyle" rel="stylesheet" href="{% static 'assets/css/argon-dashboard.css' %}" type="text/css">
+
+  <!-- Shepherd.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shepherd/8.3.1/css/shepherd.css">
+
+    <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org"></script>
+  <script src="https://unpkg.com/@barba/core"></script>
+
+  <!-- Specific CSS goes HERE -->
+  {% block stylesheets %}
+  <style>
+.fade-out {
+  opacity: 0;
+  transition: opacity 2s ease-in-out; /* 2 seconds duration */
+}
+ </style>
+    {% endblock stylesheets %}
+</head>
+
+<body class="g-sidenav-show {% if LANGUAGE_CODE == 'ar' %}rtl{% endif %} bg-gray-100">
+  <div class="menu-overlay"></div>
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <div class="menu">
+    <div class="hamburger-menu-wrapper">
+        <button class="hamburger-menu" id="hamburger-menu-button">
+            <img src="{% static 'assets/img/icons/flags/' %}{{ LANGUAGE_CODE }}.svg" class="flag-button" width="48" alt="{{ LANGUAGE_CODE }}" class="flag-icon" id="current-language-flag">
+            <span>toggle menu</span>
+        </button>
+    </div>
+    <div class="menu-list" style="display:none;">
+        <form action="{% url 'app:set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            <button type="submit" class="flag-button" name="language" value="en">
+                <img src="{% static 'assets/img/icons/flags/en.svg' %}" width="58"  alt="English">
+            </button>
+            <br>
+            <button type="submit" class="flag-button" name="language" value="ar">
+                <img src="{% static 'assets/img/icons/flags/ar.svg' %}" width="58" alt="Arabic">
+            </button>
+            <br>
+            <button type="submit" class="flag-button" name="language" value="fr">
+                <img src="{% static 'assets/img/icons/flags/fr.svg' %}" width="58" alt="French">
+            </button>
+            <br>
+            <button type="submit" class="flag-button" name="language" value="tr">
+                <img src="{% static 'assets/img/icons/flags/tr.svg' %}" width="58" alt="Turkish">
+            </button>
+        </form>
+    </div>
+</div>
+<div>
+  <input type="checkbox" id="dark-mode-toggle" style="display: none;" onclick="darkMode(this)">
+  <label for="dark-mode-toggle" style="position: fixed; top: 50%; right: 30px; transform: translateY(-50%); z-index: 1000; cursor: pointer;">
+    <i class="titanic titanic-idea" id="titanic-icon"></i>
+  </label>
+</div>
+
+<div id="barba-wrapper">
+  <div class="barba-container">
+
+    {% include "includes/sidenav.html" %}
+
+    <div class="main-content position-relative border-radius-lg" id="panel">
+        {% include "includes/navigation.html" %}
+        <div class="menu-overlay"></div>
+        
+        <div class="container-fluid py-4">
+          {% block content %}{% endblock content %}
+          {% include "includes/footer.html" %}
+        </div>
+    </div>
+  </div>
+</div>
+{% include "streamlit_embed.html" %}
+{% include "microsofter.html" %}
+
+<div>
+  <input type="checkbox" id="dark-mode-toggle" style="display: none;" onclick="darkMode(this)">
+  <label for="dark-mode-toggle" style="position: fixed; top: 50%; right: 30px; transform: translateY(-50%); z-index: 1000; cursor: pointer;">
+    <i class="titanic titanic-idea" id="titanic-icon"></i>
+  </label>
+</div>
+
+<div class="fixed-plugin ps">
+    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+      <i class="fa fa-cog py-2" aria-hidden="true"></i>
+    </a>
+  
+   <div class="card shadow-lg">
+      <div class="card-header pb-0 pt-3">
+        <div class="float-start">
+        </div>
+      </div>
+        <div>
+          <h6 class="mb-0">{% trans "See our dashboard options." %}</h6>
+          <button class="btn btn-primary w-100 mt-2" onclick="toggleConfig()">{% trans "Argon Configurator" %}</button>
+        </div>
+        <div id="config" style="display: none;">
+          <hr class="horizontal dark my-1">
+          <div>
+            <h6 class="mb-0">{% trans "Sidebar Colors" %}</h6>
+          </div>
+          <a href="javascript:void(0)" class="switch-trigger background-color">
+            <div class="badge-colors my-2 text-start">
+              <span class="badge filter bg-gradient-primary active" data-color="primary" onclick="sidebarColor(this)"></span>
+              <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
+              <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+              <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+              <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+              <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+            </div>
+          </a>
+          <div class="mt-3">
+            <h6 class="mb-0">{% trans "Sidenav Type" %}</h6>
+            <p class="text-sm">{% trans "Choose between 2 different sidenav types." %}</p>
+          </div>
+          <div class="d-flex">
+            <button class="btn bg-gradient-primary w-100 px-3 mb-2 active me-2" data-class="bg-white" onclick="sidebarType(this)">{% trans "White" %}</button>
+            <button class="btn bg-gradient-primary w-100 px-3 mb-2" data-class="bg-default" onclick="sidebarType(this)">{% trans "Dark" %}</button>
+          </div>
+          <p class="text-sm d-xl-none d-block mt-2">{% trans "You can change the sidenav type just on desktop view." %}</p>
+          <div class="d-flex my-3">
+            <h6 class="mb-0">{% trans "Navbar Fixed" %}</h6>
+            <div class="form-check form-switch ps-0 ms-auto my-auto">
+              <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
+            </div>
+          </div>
+          <hr class="horizontal dark my-sm-4">
+          <div class="mt-2 mb-5 d-flex">
+            <h6 class="mb-0">{% trans "Light / Dark" %}</h6>
+            <div class="form-check form-switch ps-0 ms-auto my-auto">
+              <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
+            </div>
+          </div>
+          <div class="d-flex" style="justify-content: space-around;">
+            <button type="button" class="btn btn-slack btn-icon" href="https://wa.me/905380546393">
+              <span class="btn-inner--icon"><i class="fab fa-whatsapp"></i></span>
+              <span class="btn-inner--text">{% trans "whatsapp" %}</span>
+            </button>
+            <button type="button" class="btn btn-facebook btn-icon">
+              <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
+              <span class="btn-inner--text">{% trans "Facebook" %}</span>
+            </button>
+          </div>
+          <div>
+            <button type="button" class="btn btn-outline-secondary w-100" href="">{% trans "Go to Home Page" %}</button>
+            <p class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">{% trans "Our patient dashboard is designed to provide easy access to all necessary medical services and information. Patients can manage their appointments, view medical records, and receive updates about their health status all in one place. Our goal is to enhance the patient experience by making healthcare more accessible and efficient." %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div> 
+<div> 
+  <button id="installButton" style="display: none;">Install App</button>
+</div> 
+
+<!-- Shepherd.js Tour Trigger Block -->
+{% block shepherd_tour_button %}
+{% endblock shepherd_tour_button %}
+
+<script>
+  function toggleConfig() {
+    const config = document.getElementById("config");
+    config.style.display = config.style.display === "none" ? "block" : "none";
+  }
+</script>
+
+{% block javascripts %}
+<!-- Shepherd.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shepherd/8.3.1/js/shepherd.min.js"></script>
+
+<script>
+    function toggleConfig() {
+      const config = document.getElementById("config");
+      config.style.display = config.style.display === "none" ? "block" : "none";
+    }
+</script>
+
+
+<script>
+  var titanic = new Titanic({
+    hover: false, // auto animated on hover (default true)
+    click: true  // auto animated on click/tap (default false)
+  });
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('{% static 'assets/service-worker.js' %}')
+    .then(function(registration) {
+      console.log('Service Worker registered with scope:', registration.scope);
+    }).catch(function(error) {
+      console.log('Service Worker registration failed:', error);
+    });
+  }
+</script>
+<script src="http://127.0.0.1:35729/livereload.js"></script>
+
+
+
+{% endblock javascripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Select all internal links
+    const links = document.querySelectorAll('a[href^="/"]'); 
+
+    // Add click event listener to each link
+    links.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent immediate navigation
+        document.body.classList.add('fade-out'); // Add fade-out class to the body
+
+        // Wait for the animation to complete, then navigate to the link
+        setTimeout(() => {
+          window.location.href = link.href;
+        }, 2000); // Match the CSS transition duration (2000ms = 2 seconds)
+      });
+    });
+  });
+</script>
+
+{% include "includes/scripts.html" %}
+
+</body>
+</html>

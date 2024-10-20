@@ -1,0 +1,46 @@
+{% load navigation_tags %}
+{% load static i18n %}
+
+<nav>
+    <div class="logo">
+        <a href="https://dentidelil-international.com/">Denti Delil</a> <!-- Main page title, dynamic for each page -->
+    </div>
+    <div class="menu-icon">
+        <span></span>
+    </div>
+</nav>
+
+<section class="overlay-menu">
+    <div class="container">
+        <div class="row">
+            <div class="main-menu">
+                <ul>
+                    {% get_site_root as site_root %}
+                    {% if site_root %}
+                        {% top_menu parent=site_root calling_page=self %}
+                    {% endif %}
+                    <!-- Call the template tag to generate items -->
+                </ul>
+                <ul>
+                    {% for child_page in root_page.get_children.live %}
+                        {% if child_page.title == "Our Blogs" %}
+                            <li>
+                                <button class="accordion-toggle">Our Blogs</button>
+                                <!-- Nested unordered list for blogs inside 'Our Blogs' -->
+                                <ul class="collapsed-list">
+                                    {% for blog in child_page.get_children.live %}
+                                        <li><a href="{{ blog.url }}">{{ blog.title }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% else %}
+                            <!-- Properly wrap each child page link inside a <li> -->
+                            <li><a href="{{ child_page.url }}">{{ child_page.title }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <p>{% trans "Your smile, our priority. Affordable dental care abroad." %}</p>
+            </div>
+        </div>
+    </div>
+</section>

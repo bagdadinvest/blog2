@@ -1,0 +1,160 @@
+{% extends "base2.html" %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags wagtailuserbar %}
+{% wagtailuserbar %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div class="container">
+        <div class="heading-content">
+            <h2> {{ page.title }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="blog-entries">
+    <div class="container">
+        <!-- Add a row to wrap both the blog posts and sidebar -->
+        <div class="row">
+            <div class="col-md-9">
+                <div class="blog-posts">
+                    <div class="row">
+                        {% for post in blogs %}
+                        <div class="col-md-12">
+                            <div class="blog-post">
+                                {% if post.feed_image %}
+                                <a href="{{ post.url }}">
+                                    {% image post.feed_image fill-900x400 as feed_image %}
+                                    <img src="{{ feed_image.url }}" alt="{{ post.title }}"></a>
+                                {% endif %}
+                            
+                                <div class="text-content">
+                                    <span><a href="#">Editorial</a> / <a href="#">{{ post.date }}</a> / <a href="#">Dentil Delil Team</a></span>
+                                    <h2>{{ post.title }}</h2>
+                                    <p>{{ post.intro|safe }}</p>
+                                    <div class="simple-btn">
+                                        <a href="{{ post.url }}">continue reading</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Pagination -->
+                        {% if blogs.has_other_pages %}
+                        <div class="col-md-12">
+                            <ul class="page-number">
+                                <!-- Previous Button -->
+                                {% if blogs.has_previous %}
+                                    <li class="pagination-previous">
+                                        <a href="?page={{ blogs.previous_page_number }}">&gt;</a>
+                                    </li>
+                                {% else %}
+                                    <li class="pagination-previous disabled"><a href="#">&lt;</a></li>
+                                {% endif %}
+                        
+                                <!-- Page Number Buttons -->
+                                {% for num in blogs.paginator.page_range %}
+                                    {% if blogs.number == num %}
+                                        <li class="active"><a href="#">{{ num }}</a></li> <!-- Active Page -->
+                                    {% else %}
+                                        <li><a href="?page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                        
+                                <!-- Next Button -->
+                                {% if blogs.has_next %}
+                                    <li class="page-number">
+                                        <a href="?page={{ blogs.next_page_number }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="pagination-next disabled"><a href="#">Next</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="side-bar">
+                    <div class="search">
+                        <fieldset>
+                            <input name="search" type="text" class="form-control" id="search" placeholder="Search..." required="">
+                        </fieldset>
+                    </div>
+                    <div class="archives">
+                            <div class="sidebar-heding">
+                                <h2>Quick Links</h2>
+                            </div>
+                            <ul>
+                                <li><a href="/">&gt; Home</a></li>
+                                <li><a href="#">&gt; About Us </a></li>
+                                <li><a href="#">&gt; Denti-Board </a></li>
+                                <li><a href="#">&gt; Top Blogs</a></li>
+                            </ul>
+                        </div>
+                    <div class="recent-posts">
+                        <div class="sidebar-heding">
+                            <h2>Recent Posts</h2>
+                        </div>
+                        <ul>
+                            {% if blogs %}
+                                {% for post in blogs %}
+                                    <li><a href="{{ post.url }}">
+                                        {% if post.feed_image %}
+                                            {% image post.feed_image fill-140x60 as feed_image %}
+                                            <img src="{{ feed_image.url }}" alt="{{ post.title }}">
+                                        {% endif %}
+                                        <div class="text">
+                                            <h6>{{ post.title }}</h6>
+                                            <span>{{ post.date }}</span>
+                                        </div>
+                                    </a></li>
+                                {% endfor %}
+                            {% else %}
+                                <p>No recent posts available.</p>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="categories">
+                        <div class="sidebar-heding">
+                            <h2>Quick Links</h2>
+                        </div>
+                        <ul>
+                            <li><a href="/">&gt; Home</a></li>
+                            <li><a href="#">&gt; About Us </a></li>
+                            <li><a href="#">&gt; Denti-Board </a></li>
+                            <li><a href="#">&gt; Top Blogs</a></li>
+                        </ul>
+                    </div>
+                    <div class="latest-gallery">
+                        <div class="sidebar-heding">
+                            <h2>Latest Gallery</h2>
+                        </div>
+                        <ul class="gallery-list">
+                            {% for post in blogs %}
+                                {% if post.feed_image %}
+                                    {% image post.feed_image fill-120x120 as feed_image %}
+                                    <li>
+                                        <a href="{{ post.url }}">
+                                            <img src="{{ feed_image.url }}" alt="{{ post.title }}">
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                                    </div>
+            </div>
+        </div> <!-- End row -->
+    </div> <!-- End container -->
+</div> 
+
+{% endblock content %}
+{% block javascripts %}
+{% endblock javascripts %}

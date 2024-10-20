@@ -1,0 +1,14 @@
+HTTrack3.49-5 launched on Mon, 30 Sep 2024 21:16:14 at http://localhost:8080
+(httrack http://localhost:8080 -O /home/lofa/Desktop/baking/dentidelil/website_backup )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+21:16:16	Warning: 	Found for localhost:8080/
+21:16:16	Warning: 	File has moved from localhost:8080/ to /en/
+21:16:48	Warning: 	file not stored in cache due to bogus state (incomplete type with OK (200), size 2036): localhost:8080/static/home/js/main.js
+21:18:50	Warning: 	Retry after error 500 (Internal Server Error) at link localhost:8080/en/our-blogs/dental-tourism-aftercare-turkey/ (from localhost:8080/en/)
+21:25:00	Error: 	Exit requested by shell or user
+21:25:02	Warning: 	File not added due to mirror cancel: localhost:8080/en/our-blogs/the-importance-of-a-night-guard-after-zirconium-crown-installation/img/latest_gallery_6.png

@@ -1,0 +1,133 @@
+{% extends "base2.html" %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags wagtailuserbar i18n %}
+{% wagtailuserbar %}
+
+{% block canonical_url %}
+    <link rel="amphtml" href="{{ request.site.root_url }}{% routablepageurl page 'amp' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div class="container">
+        <div class="heading-content">
+            <h2>{% trans "Our" %} <em>{% trans "Blog" %}</em></h2>
+        </div>
+    </div>
+</div>
+
+<div class="blog-entries">
+    <div class="container">
+        <!-- Add a row to wrap both columns -->
+        <div class="row">
+            <div class="col-md-9">
+                <div class="blog-posts">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="single-blog-post">
+                                {% if self.feed_image %}
+                                    {% image self.feed_image fill-765x325 as feed_image %}
+                                    <img src="{{ feed_image.url }}" alt="{% trans 'Blog Image' %}">
+                                {% endif %}
+                                <div class="text-content">
+                                    {% include "blog/includes/blog_header.html" %}
+                                    {% include "blog/includes/blog_body.html" with body=self.body only %}
+                                    <div class="simple-btn">
+                                        <!-- Replace the routablepageurl with pageurl for correct redirection -->
+                                        <a href="{% pageurl self.blog_index %}" style="color: gold;">{% trans "Back to Blog" %}</a>
+                                    </div>
+                                </div>
+
+                                <div class="tags-share">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="tags">
+                                                {% with self.tags.all as tags %}
+                                                {% if tags %}
+                                                <li>{% trans "Tags:" %}</li>
+                                                {% for tag in tags.all %}
+                                                    <li><a href="{% pageurl self.blog_index %}?tag={{ tag }}">{{ tag }}</a></li>
+                                                {% endfor %}
+                                                {% endif %}
+                                                {% endwith %}
+                                            </ul>
+                                        </div>
+                                        <!-- Social share include -->
+                                        {% include "utils/includes/social_share.html" %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add the column size for the sidebar -->
+            <div class="col-md-3">
+                <div class="side-bar">
+                    <div class="search">
+                        <fieldset>
+                            <input name="search" type="text" class="form-control" id="search" placeholder="{% trans 'Search...' %}" required="">
+                        </fieldset>
+                    </div>
+                    <div class="archives">
+                        <div class="sidebar-heding">
+                            <h2>{% trans 'Quick Links' %}</h2>
+                        </div>
+                        <ul>
+                            <li><a href="/">&gt; {% trans 'Home' %}</a></li>
+                            <li><a href="#">&gt; {% trans 'About Us' %}</a></li>
+                            <li><a href="#">&gt; {% trans 'Denti-Board' %}</a></li>
+                            <li><a href="#">&gt; {% trans 'Top Blogs' %}</a></li>
+                        </ul>
+                    </div>
+                    <div class="recent-posts">
+                        <div class="sidebar-heding">
+                            <h2>{% trans 'Recent Posts' %}</h2>
+                        </div>
+                        <ul>
+                            {% if blogs %}
+                                {% for post in blogs|slice:":6" %}
+                                    <li>
+                                        <a href="{{ post.url }}">
+                                            {% if post.feed_image %}
+                                                {% image post.feed_image fill-60x60 as feed_image %}
+                                                <img src="{{ feed_image.url }}" alt="{{ post.title }}">
+                                            {% endif %}
+                                            <div class="text">
+                                                <h6>{{ post.title }}</h6>
+                                                <span>{{ post.date }}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <!-- Replace <p> with <li> to maintain list structure -->
+                                <li style="color: white;">{% trans 'No recent posts available.' %}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    <div class="latest-gallery">
+                        <div class="sidebar-heding">
+                            <h2>{% trans 'Latest Gallery' %}</h2>
+                        </div>
+                        <ul class="gallery-list">
+                            {% for post in blogs %}
+                                {% if post.feed_image %}
+                                    {% image post.feed_image fill-120x120 as feed_image %}
+                                    <li>
+                                        <a href="{{ post.url }}">
+                                            <img src="{{ feed_image.url }}" alt="{{ post.title }}">
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End row -->
+    </div> <!-- End container -->
+</div> <!-- End blog-entries -->
+
+{% endblock %}

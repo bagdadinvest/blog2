@@ -1,0 +1,109 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'assets/img/apple-icon.png' %}">
+  <link rel="icon" type="image/png" href="{% static 'assets/img/favicon.png' %}">
+  <link rel="manifest" href="{% static 'assets/manifest.json' %}">
+  <meta name="theme-color" content="#ffffff">
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+  <title>
+    Dent i-Delil Clinic - {% block title %} {% endblock title %} | Dent i-Delil Clinic
+  </title>
+  <!-- Fonts and icons -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@300;400;600;700&display=swap&subset=arabic" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Nucleo Icons -->
+  <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet"/>
+  <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet"/>
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet"/>
+  <!-- CSS Files -->
+  <link id="pagestyle" rel="stylesheet" href="{% static 'assets/css/custom-styles.css' %}" type="text/css">
+  <link id="pagestyle" href="{% static 'assets/css/argon-dashboard.css' %}" rel="stylesheet"/>
+
+  <!-- Specific CSS goes HERE -->
+  {% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'tour/bootstrap-tourist.css' %}">
+  {% endblock stylesheets %}
+</head>
+
+<body>
+
+  <div class="main-content">
+    <!-- Language toggle -->
+
+    {% block content %}
+    <div class="container" data-step="1" data-intro="Welcome to Dent i-Delil Clinic! Click this button to start the tutorial.">
+      <h2>Welcome to Dent i-Delil Clinic</h2>
+      <p>Click the button below to start the tutorial.</p>
+      <button id="start-tutorial" class="btn btn-lg btn-info">Start Tutorial</button>
+    </div>
+    {% endblock content %}
+  </div>
+
+  {% block javascripts %}
+  <script src="{% static 'tour/bootstrap-tourist.js' %}"></script>
+  <script>
+      // Initialize the tour
+      var tour = new Tour({
+        framework: 'bootstrap4',
+        steps: [
+          {
+            element: "[data-step='1']",
+            title: "Welcome",
+            content: "Click this button to start the tutorial.",
+            placement: "right",
+            reflex: true,
+          },
+          // Add more steps as necessary
+        ],
+
+      });
+
+      // Start the tour on button click
+      $('#start-tutorial').click(function() {
+          tour.start();
+      });
+
+      // Language toggle script
+      $(document).ready(function() {
+          $('.flag-button').click(function(event) {
+              event.preventDefault();
+              $('.flag-button').removeClass('active');
+              $(this).addClass('active');
+              setTimeout(() => {
+                  $(this).closest('form').submit();
+              }, 500);
+          });
+      });
+  </script>
+
+  <!-- Other Scripts -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('{% static 'assets/service-worker.js' %}')
+      .then(function(registration) {
+        console.log('Service Worker registered with scope:', registration.scope);
+      }).catch(function(error) {
+        console.log('Service Worker registration failed:', error);
+      });
+    }
+  </script>
+  {% endblock javascripts %}
+
+
+  <script src="http://127.0.0.1:35729/livereload.js"></script>
+
+</body>
+
+</html>

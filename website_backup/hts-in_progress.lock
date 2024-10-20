@@ -1,0 +1,7 @@
+Mirror in progress since Mon, 30 Sep 2024 21:16:14 .. please wait!
+httrack http://localhost:8080 -O /home/lofa/Desktop/baking/dentidelil/website_backup 
+To pause the engine: create an empty file named 'hts-stop.lock'
+PID=14153
+UID=1000
+GID=1000
+START=1727720174
