@@ -41,7 +41,7 @@ path.append(DJANGO_ROOT)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = ['localhost','beyondclinic.online','127.0.0.1','cms.dentidelil-international.com']
+ALLOWED_HOSTS = ['*']
 
 AZURE_TRANSLATOR_KEY = env('AZURE_TRANSLATOR_KEY', default='')
 AZURE_TRANSLATOR_ENDPOINT = 'https://api.cognitive.microsofttranslator.com/'
